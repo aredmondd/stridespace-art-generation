@@ -1,0 +1,30 @@
+# Virtual environment
+venv/
+.env
+*.venv
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Byte-compiled / cached files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Log files
+logs/
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python dependencies
+*.egg-info/
+dist/
+build/
