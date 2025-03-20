@@ -1,14 +1,15 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 from generator import generate_super_abstract
-from fastapi.responses import Response
+from starlette.responses import StreamingResponse
+from io import BytesIO
 
 app = FastAPI()
 
-# ✅ CORS middleware applied globally
+# ✅ Global CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins temporarily
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
@@ -22,16 +23,9 @@ def read_root():
 def generate_art(distance: float, duration: float, emotion: str):
     """Generates abstract art based on run data."""
     image_buffer = generate_super_abstract((distance, duration, emotion))
-
-    # ✅ Add CORS headers explicitly to the image response
-    headers = {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-        "Access-Control-Allow-Headers": "*"
-    }
-
-    return Response(
-        content=image_buffer.getvalue(),
-        media_type="image/png",
-        headers=headers
+    
+    # ✅ Use StreamingResponse for the image
+    return StreamingResponse(
+        BytesIO(image_buffer.getvalue()),
+        media_type="image/png"
     )
